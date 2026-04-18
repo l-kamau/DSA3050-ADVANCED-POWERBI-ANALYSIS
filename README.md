@@ -1,4 +1,4 @@
-# Credit Risk & Loan Analytics Dashboard 🏦
+# Credit Risk & Loan Analytics Dashboard 
 
 This repository contains an end-to-end data engineering and business intelligence project focused on financial risk assessment. Using a dataset of borrower characteristics and loan statuses, I developed a structured Power BI solution to identify patterns leading to loan defaults.
 
