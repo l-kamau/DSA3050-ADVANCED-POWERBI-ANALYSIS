@@ -15,10 +15,10 @@ The objective of this project is to provide financial stakeholders with a **Risk
 ---
 
 ## Data Architecture (Schema Preparation)
-I transitioned the flat-file source data into a **Star Schema** to optimize query performance and ensure a "Single Source of Truth."
+I transitioned the flat-file source data into a **Star Schema** to optimize query performance.
 
 ### **Model Structure:**
-* **Fact Table (`Fact_Loans`):** Stores quantitative data including `loan_amnt`, `loan_int_rate`, `credit_score`, and `person_income`.
+* **Fact Table (`fact_Loans`):** Stores quantitative data including `loan_amnt`, `loan_int_rate`, `credit_score`, and `person_income` and others.
 * **Dimension Tables:**
     * **Dim_Borrower:** Contains borrower attributes (Gender, Education).
     * **Dim_HomeOwnership:** Categorizes housing status (Rent, Own, Mortgage).
@@ -44,18 +44,28 @@ The following transformations were performed in **Power Query** to ensure data q
 
 ## Analytical Measures (DAX)
 To drive the dashboard visuals, I developed several custom measures:
-* **Total Loan Volume:** `Total Loan Volume = SUM(Fact_Loans[loan_amnt])`
-* **Default Rate %:** `Default Rate % = DIVIDE(CALCULATE(COUNT(Fact_Loans[loan_status]), Fact_Loans[loan_status] = "Default"), COUNT(Fact_Loans[loan_status]))`
-* **Average Credit Score:** `Avg Credit Score = AVERAGE(Fact_Loans[credit_score])`
+* **Total Loan Amount:** `Total Loan Amount = SUM(Fact_Loans[loan_amnt])`
+* **Default Rate %:** `Default Rate % = DIVIDE(CALCULATE(COUNTROWS(fact_Loans), fact_Loans[loan_status] = "Default"), COUNTROWS(fact_Loans))`
+* **Average Loan Amount:** `Average Loan Amount = AVERAGE(fact_Loans[loan_amnt])`
+* **Total Borrowers:** `Total Borrowers = COUNTROWS(fact_Loans)`
+* **Average Interest Rate:** `Average Interest Rate = AVERAGE(fact_Loans[loan_int_rate])`
+* **Approved Loan Rate:**`Approved Loan Rate % = DIVIDE(CALCULATE(COUNTROWS(fact_Loans), fact_Loans[loan_status] = "Approved"),COUNTROWS(fact_Loans))`
+* **Average-to-Loan Ratio:** `Avg Loan % Income = AVERAGE(fact_Loans[loan_percent_income])`
+* **High-Risk Loan Counts:** `High Risk Loans = CALCULATE(COUNTROWS(fact_Loans), fact_Loans[loan_percent_income] > 0.4)`
+* **Loan Ranking By Amount:** `Loan Rank = RANKX(ALL(fact_Loans),[Total Loan Amount], ,DESC)`
 
 ---
 
 ## Challenges Encountered
-* **Many-to-Many Relationships:** Initially, linking dimensions directly to the fact table caused ambiguity errors. I resolved this by normalizing the dimension tables—removing duplicates in Power Query—to establish a clean **1:* cardinality**.
-* **Schema Mismatches:** Handled missing columns in source files by using **"Choose Columns"** instead of "Remove Columns," making the ETL process more robust.
+* Lack of a unique borrower identifier limited the creation of a borrower dimension table
+* Data inconsistencies required extensive cleaning and transformation
+* Designing a meaningful star schema from a flat dataset required careful modeling decisions.
 
 ---
+## Conclusion
+This project demonstrates the application of advanced Power BI techniques to transform raw financial data into actionable insights. The developed dashboard enables stakeholders to explore loan performance, assess risk, and make informed decisions.
 
+---
 ## 📂 Repository Contents
 * `loan_data.csv`: The raw source data.
 * `Credit_Risk_Analysis.pbix`: The final Power BI report file.
