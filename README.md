@@ -18,7 +18,7 @@ The objective of this project is to provide financial stakeholders with a **Risk
 I transitioned the flat-file source data into a **Star Schema** to optimize query performance.
 
 ### **Model Structure:**
-* **Fact Table (`fact_Loans`):** Stores quantitative data including `loan_amnt`, `loan_int_rate`, `credit_score`, and `person_income` and others.
+* **Fact Table (`fact_Loans`):** Stores quantitative data including `loan_amnt`, `loan_int_rate`, `credit_score`, and `person_income` and other variables.
 * **Dimension Tables:**
     * **Dim_Borrower:** Contains borrower attributes (Gender, Education).
     * **Dim_HomeOwnership:** Categorizes housing status (Rent, Own, Mortgage).
